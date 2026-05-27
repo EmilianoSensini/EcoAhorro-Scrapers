@@ -88,7 +88,7 @@ class TestConstruirId:
     """Tests for construir_id - build composite supermarket-product ID."""
 
     def test_standard_case(self):
-        assert construir_id("02", "123456789012") == "012345678901202"
+        assert construir_id("02", "123456789012") == "020123456789012"
 
     def test_none_ean_returns_none(self):
         assert construir_id("02", None) is None

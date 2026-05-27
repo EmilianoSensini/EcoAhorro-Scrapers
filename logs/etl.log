@@ -49,3 +49,39 @@
 [2026-05-14 10:27:36]   Filtrados (fuera de catálogo): 1346
 [2026-05-14 10:27:36] ==================================================
 [2026-05-14 10:27:36] ETL COMPLETADO
+[2026-05-27 13:51:57] ==================================================
+[2026-05-27 13:51:57] INICIO ETL
+[2026-05-27 13:51:57] ==================================================
+[2026-05-27 13:51:57] Paso 1/5: Ejecutando scrapers en paralelo...
+[2026-05-27 13:51:57]   [Vea] Intento 1/2...
+[2026-05-27 13:51:57]   [ChangoMas] Intento 1/2...
+[2026-05-27 13:51:57]   [Cooperativa Obrera] Intento 1/2...
+[2026-05-27 13:51:57]   [La Banderita] Intento 1/2...
+[2026-05-27 13:53:08]   [La Banderita] OK
+[2026-05-27 14:25:15]   [Cooperativa Obrera] OK
+[2026-05-27 14:39:48]   [Vea] OK
+[2026-05-27 14:41:34]   [ChangoMas] OK
+[2026-05-27 14:41:34] Scrapers: 4/4 exitosos
+[2026-05-27 14:41:34] Paso 2/5: Consolidando precios...
+[2026-05-27 14:41:34] Consolidación: 2 archivos, 3156 registros
+[2026-05-27 14:41:34]   Eliminado: precios_labanderita_20260527_165157.csv
+[2026-05-27 14:41:34]   Eliminado: precios_lacoope_20260527_165157.csv
+[2026-05-27 14:41:34] Intermedios: 2 archivos eliminados
+[2026-05-27 14:41:34] Paso 3/5: Generando tabla maestra...
+[2026-05-27 14:41:35] Tabla maestra: 3114 productos únicos
+[2026-05-27 14:41:35] Paso 4/5: Subiendo a base de datos...
+[2026-05-27 14:41:35] Subida DB: 0 registros
+[2026-05-27 14:41:35] ==================================================
+[2026-05-27 14:41:35] RESUMEN ETL
+[2026-05-27 14:41:35] ==================================================
+[2026-05-27 14:41:35]   Vea: OK
+[2026-05-27 14:41:35]   ChangoMas: OK
+[2026-05-27 14:41:35]   Cooperativa Obrera: OK
+[2026-05-27 14:41:35]   La Banderita: OK
+[2026-05-27 14:41:35] ---
+[2026-05-27 14:41:35] Consolidados: 3156 registros
+[2026-05-27 14:41:35] Tabla maestra: 3114 productos únicos
+[2026-05-27 14:41:35]   Filtrados (fuera de catálogo): 41
+[2026-05-27 14:41:35] Subida DB: 0 registros
+[2026-05-27 14:41:35] ==================================================
+[2026-05-27 14:41:35] ETL COMPLETADO

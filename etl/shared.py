@@ -31,7 +31,7 @@ def construir_id(id_supermercado: str, id_producto: str) -> str:
     ean = normalizar_ean(id_producto)
     if ean is None:
         return None
-    return f"{ean}{id_supermercado}"
+    return f"{id_supermercado}{ean}"
 
 
 def precio_a_float(valor) -> float | None:
