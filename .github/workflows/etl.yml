@@ -4,7 +4,8 @@ name: ETL Pipeline
 on:
   schedule:
     # Run daily at 02:00 Argentina time (UTC-3)
-    - cron: '16 22 * * *'
+    - cron: '30 22 * * *'
+    #Testeo con esa hora para probar
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
