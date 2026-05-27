@@ -47,3 +47,5 @@ scrapers/**/*.csv
 
 # EAN mapping outputs
 ean_mapping/**/*.csv
+
+# pytest.pytest_cache/

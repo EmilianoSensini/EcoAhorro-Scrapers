@@ -1,4 +1,4 @@
-import csv
+﻿import csv
 import sys
 import os
 
@@ -7,7 +7,11 @@ LONGITUD_EAN = 13
 
 
 def normalizar_id(id_raw: str) -> str | None:
+    if id_raw is None:
+        return None
     id_str = id_raw.strip().strip('"').strip("'")
+    if not id_str:
+        return None
     id_str = id_str.zfill(LONGITUD_EAN)
     if len(id_str) == LONGITUD_EAN and id_str.isdigit():
         return id_str
@@ -81,8 +85,8 @@ def main():
     stats = procesar(archivo_entrada, archivo_salida)
 
     print("Resumen:")
-    print(f"  Leídos:     {stats['leidos']}")
-    print(f"  Inválidos:  {stats['invalidos']}")
+    print(f"  Leidos:     {stats['leidos']}")
+    print(f"  Invalidos:  {stats['invalidos']}")
     print(f"  Duplicados: {stats['duplicados']}")
     print(f"  Escritos:   {stats['escritos']}")
 
