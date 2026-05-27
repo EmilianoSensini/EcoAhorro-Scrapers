@@ -1,0 +1,8 @@
+name: ETL Pipeline
+on:
+  workflow_dispatch: # Esto activa el botón manual
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Activando la interfaz web de Actions"
