@@ -1,13 +1,10 @@
 """Tests for tabla_maestra.py - filters consolidated prices against normalized catalog."""
 
-import sys
 import os
 import csv
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-import utilidades.tabla_maestra as tm_mod
+import etl.step_master as tm_mod
 
 
 @pytest.fixture

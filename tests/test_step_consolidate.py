@@ -1,13 +1,10 @@
 """Tests for consolidar_precios.py - merges individual scraper CSVs."""
 
-import sys
 import os
 import csv
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-import utilidades.consolidar_precios as cp_mod
+import etl.step_consolidate as cp_mod
 
 
 @pytest.fixture

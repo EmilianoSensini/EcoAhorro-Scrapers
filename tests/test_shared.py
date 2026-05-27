@@ -1,15 +1,10 @@
 """Tests for ean_utils.py - EAN normalization, price parsing, ID construction."""
 
-import sys
-import os
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-from utilidades.ean_utils import (
+from etl.shared import (
     normalizar_ean,
     precio_a_float,
-    parse_precio_argentino,
     construir_id,
     cargar_config_supermercados,
 )
@@ -52,20 +47,29 @@ class TestPrecioAfloat:
     def test_simple_integer(self):
         assert precio_a_float("1234") == 1234.0
 
-    def test_with_commas(self):
+    def test_with_thousands_sep(self):
         assert precio_a_float("1.234") == 1234.0
 
-    def test_with_commas_and_decimals(self):
+    def test_full_argentine_format(self):
         assert precio_a_float("1.234,56") == 1234.56
 
-    def test_argentine_format(self):
+    def test_with_currency_symbol(self):
         assert precio_a_float("$ 1.234,56") == 1234.56
 
-    def test_argentine_format_no_space(self):
+    def test_currency_no_space(self):
         assert precio_a_float("$1.234,56") == 1234.56
 
     def test_decimal_only(self):
         assert precio_a_float("0,99") == 0.99
+
+    def test_no_thousands_separator(self):
+        assert precio_a_float("$ 1234,56") == 1234.56
+
+    def test_integer_with_thousands_sep(self):
+        assert precio_a_float("$ 1.234") == 1234.0
+
+    def test_no_currency_symbol(self):
+        assert precio_a_float("1.234,56") == 1234.56
 
     def test_negative_price(self):
         assert precio_a_float("-123,45") == -123.45
@@ -80,36 +84,11 @@ class TestPrecioAfloat:
         assert precio_a_float("not_a_price") is None
 
 
-class TestParsePrecioArgentino:
-    """Tests for parse_precio_argentino - parse Argentine-formatted prices."""
-
-    def test_standard_format(self):
-        assert parse_precio_argentino("$ 1.234,56") == 1234.56
-
-    def test_no_thousands_separator(self):
-        assert parse_precio_argentino("$ 1234,56") == 1234.56
-
-    def test_integer_price(self):
-        assert parse_precio_argentino("$ 1.234") == 1234.0
-
-    def test_no_currency_symbol(self):
-        assert parse_precio_argentino("1.234,56") == 1234.56
-
-    def test_none_returns_none(self):
-        assert parse_precio_argentino(None) is None
-
-    def test_empty_returns_none(self):
-        assert parse_precio_argentino("") is None
-
-    def test_invalid_returns_none(self):
-        assert parse_precio_argentino("abc") is None
-
-
 class TestConstruirId:
     """Tests for construir_id - build composite supermarket-product ID."""
 
     def test_standard_case(self):
-        assert construir_id("02", "123456789012") == "02-0123456789012"
+        assert construir_id("02", "123456789012") == "012345678901202"
 
     def test_none_ean_returns_none(self):
         assert construir_id("02", None) is None

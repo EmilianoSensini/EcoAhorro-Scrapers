@@ -1,13 +1,9 @@
 """Tests for normalizar_catalogo.py - EAN normalization and dedup in product catalog."""
 
-import sys
-import os
 import csv
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-from utilidades.normalizar_catalogo import normalizar_id, procesar
+from etl.step_catalog import normalizar_id, procesar
 
 
 class TestNormalizarId:
@@ -46,7 +42,7 @@ class TestProcesar:
         input_file = tmp_path / "catalogo_input.csv"
         with open(str(input_file), "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["ID/EAN", "nombre", "marca", "presentacion", "categoria"])
+            w.writerow(["id", "nombre", "marca", "presentacion", "categoria"])
             w.writerow(["123", "Producto A", "Marca X", "1L", "Lacteos"])
             w.writerow(["0123456789012", "Producto B", "Marca Y", "500g", "Almacen"])
             w.writerow(["", "Producto C", "Marca Z", "200g", "Frescos"])
@@ -63,7 +59,7 @@ class TestProcesar:
             rows = list(reader)
         prod_a = [r for r in rows if r["nombre"] == "Producto A"]
         assert len(prod_a) == 1
-        assert prod_a[0]["ID/EAN"] == "0000000000123"
+        assert prod_a[0]["id"] == "0000000000123"
 
     def test_removes_invalid_eans(self, sample_catalog):
         input_file, output_file = sample_catalog
@@ -79,7 +75,7 @@ class TestProcesar:
         input_file = tmp_path / "catalogo_dups.csv"
         with open(str(input_file), "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["ID/EAN", "nombre", "marca", "presentacion", "categoria"])
+            w.writerow(["id", "nombre", "marca", "presentacion", "categoria"])
             w.writerow(["123", "Producto A", "Marca X", "1L", "Lacteos"])
             w.writerow(["0000000000123", "Producto A Dup", "Marca X", "1L", "Lacteos"])
         output_file = tmp_path / "catalogo_dedup.csv"

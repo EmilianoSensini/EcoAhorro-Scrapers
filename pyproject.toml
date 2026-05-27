@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecoahorro-scrapers"
+version = "0.1.0"
+description = "ETL pipeline for supermarket price scraping"
+requires-python = ">=3.12"
+dependencies = [
+    "playwright>=1.40",
+    "selenium>=4.15",
+    "beautifulsoup4>=4.12",
+    "aiohttp>=3.9",
+    "nest-asyncio>=1.6",
+    "pandas>=2.0",
+    "psycopg2-binary>=2.9",
+]
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.setuptools.packages.find]
+include = ["etl*"]

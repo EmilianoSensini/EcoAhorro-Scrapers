@@ -3,12 +3,11 @@ import csv
 import sys
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ean_utils import normalizar_ean
+from etl.shared import normalizar_ean
 
 CARPETA_DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 ARCHIVO_CONSOLIDADO = os.path.join(CARPETA_DATA, "consolidado_precios.csv")
-ARCHIVO_CATALOGO = os.path.join(CARPETA_DATA, "catalogo_productos_normalizado.csv")
+ARCHIVO_CATALOGO = os.path.join(CARPETA_DATA, "catalogo_productos.csv")
 ARCHIVO_SALIDA = os.path.join(CARPETA_DATA, "tabla_maestra.csv")
 
 
@@ -16,7 +15,7 @@ def cargar_catalogo(ruta: str) -> set:
     catalogo = set()
     with open(ruta, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        columna_id = "ID/EAN" if "ID/EAN" in reader.fieldnames else "idProducto"
+        columna_id = "ID/EAN" if "ID/EAN" in reader.fieldnames else "idProducto" if "idProducto" in reader.fieldnames else "id"
         for fila in reader:
             id_raw = fila.get(columna_id, "")
             id_normalizado = normalizar_ean(id_raw)

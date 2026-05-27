@@ -31,26 +31,10 @@ def construir_id(id_supermercado: str, id_producto: str) -> str:
     ean = normalizar_ean(id_producto)
     if ean is None:
         return None
-    return f"{id_supermercado}-{ean}"
+    return f"{ean}{id_supermercado}"
 
 
-def precio_a_float(valor) -> float:
-    if isinstance(valor, (int, float)):
-        return float(valor)
-    if not isinstance(valor, str) or not valor.strip():
-        return None
-    s = valor.replace("$", "").replace(" ", "").strip()
-    s = s.replace(".", "").replace(",", ".")
-    m = re.search(r"-?[\d.]+", s)
-    if m:
-        try:
-            return float(m.group())
-        except ValueError:
-            return None
-    return None
-
-
-def parse_precio_argentino(valor) -> float:
+def precio_a_float(valor) -> float | None:
     if isinstance(valor, (int, float)):
         return float(valor)
     if not isinstance(valor, str) or not valor.strip():
@@ -58,15 +42,16 @@ def parse_precio_argentino(valor) -> float:
     s = valor.replace("$", "").replace(" ", "").strip()
     if not s:
         return None
-    # Detect if there is a decimal comma (Argentine format)
+
+    # Argentine format: decimal comma, optional dot as thousands separator
+    # e.g. "1.234,56" or "1234,56" or "1.234" or "5,89"
     if re.search(r"\d+,\d{2}$", s):
         s = s.replace(".", "").replace(",", ".")
     else:
-        # No decimal comma: treat dots as thousands separators if more than one
-        # or if followed by exactly 3 digits at the end
         if re.search(r"\d\.\d{3}$", s):
             s = s.replace(".", "")
         s = s.replace(",", ".")
+
     m = re.search(r"-?[\d.]+", s)
     if m:
         try:

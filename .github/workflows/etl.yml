@@ -2,9 +2,18 @@
 
 on:
   schedule:
-    # Run daily at 06:00 and 18:00 Argentina time (UTC-3)
-    - cron: '0 9,21 * * *'
-  workflow_dispatch:  # Allow manual trigger
+    # Run daily at 02:00 Argentina time (UTC-3)
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Modo de ejecución'
+        required: true
+        default: 'upload-only'
+        type: choice
+        options:
+          - full
+          - upload-only
 
 jobs:
   etl:
@@ -22,16 +31,25 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e .
 
       - name: Install Playwright browsers
+        if: ${{ github.event.inputs.mode == 'full' || github.event_name == 'schedule' }}
         run: |
           python -m playwright install chromium
 
       - name: Run ETL pipeline
-        run: python utilidades/ejecutar_etl.py
+        if: ${{ github.event.inputs.mode == 'full' || github.event_name == 'schedule' }}
+        run: python -m etl.run
+
+      - name: Upload test CSV to DB
+        if: ${{ github.event.inputs.mode == 'upload-only' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m etl.step_upload data/test_upload.csv
 
       - name: Upload price data as artifact
+        if: ${{ github.event.inputs.mode == 'full' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v4
         with:
           name: price-data

@@ -2,7 +2,7 @@
 import sys
 import os
 
-COLUMNA_ID = "ID/EAN"
+COLUMNA_ID = "id"
 LONGITUD_EAN = 13
 
 
@@ -68,7 +68,7 @@ def main():
             script_dir, "..", "data", "catalogo_productos.csv"
         )
         archivo_salida = os.path.join(
-            script_dir, "..", "data", "catalogo_productos_normalizado.csv"
+            script_dir, "..", "data", "catalogo_productos.csv"
         )
 
     archivo_entrada = os.path.abspath(archivo_entrada)
