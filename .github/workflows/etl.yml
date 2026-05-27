@@ -2,8 +2,8 @@
 
 on:
   schedule:
-    # Run daily at 13:00 Argentina time (UTC-3)
-    - cron: '0 16 * * *'
+    # Run daily at 02:00 Argentina time (UTC-3)
+    - cron: '0 5 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
