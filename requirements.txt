@@ -1,0 +1,13 @@
+﻿# Web scraping & browser automation
+playwright>=1.40,<2.0
+selenium>=4.15,<5.0
+beautifulsoup4>=4.12,<5.0
+
+# Async HTTP
+aiohttp>=3.9,<4.0
+
+# Data manipulation
+pandas>=2.0,<3.0
+
+# Utilities
+nest-asyncio>=1.6,<2.0

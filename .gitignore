@@ -1,0 +1,49 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.env
+.venv/
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project data (generated files)
+data/prices/
+data/products/
+data/*.csv
+!data/catalogo_productos.csv
+!data/catalogo_productos_viejo.csv
+!data/consolidado_precios.csv
+!data/tabla_maestra.csv
+!data/categorias.csv
+
+# Logs
+logs/*.log
+!logs/etl.log
+
+# Playwright browsers
+ms-playwright/
+
+# Scraper outputs
+scrapers/**/resultados/
+scrapers/**/*.csv
+
+# EAN mapping outputs
+ean_mapping/**/*.csv
