@@ -23,4 +23,5 @@ test = [
 ]
 
 [tool.setuptools.packages.find]
+where = ["tasks/daily-price-update"]
 include = ["etl*"]
