@@ -38,6 +38,6 @@ jobs:
         with:
           name: price-data
           path: |
-            data/consolidado_precios.csv
-            data/tabla_maestra.csv
-            logs/etl.log
+            tasks/daily-price-update/data/consolidado_precios.csv
+            tasks/daily-price-update/data/tabla_maestra.csv
+            tasks/daily-price-update/logs/etl.log
