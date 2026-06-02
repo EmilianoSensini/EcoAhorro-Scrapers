@@ -50,13 +50,27 @@ def guardar_historial(precios_promedio: list) -> int:
             for ean, precio in precios_promedio:
                 cur.execute(
                     """
-                    INSERT INTO "HistorialPrecios" ("id", "fechaGuardado", "precioPromedio")
-                    VALUES (%s, %s, %s)
-                    ON CONFLICT ("id", "fechaGuardado") DO UPDATE SET
-                        "precioPromedio" = EXCLUDED."precioPromedio"
+                    SELECT 1 FROM "HistorialPrecios" WHERE "id" = %s AND "fechaGuardado" = %s
                     """,
-                    (ean, fecha_utc, precio),
+                    (ean, fecha_utc),
                 )
+                existe = cur.fetchone()
+
+                if existe:
+                    cur.execute(
+                        """
+                        UPDATE "HistorialPrecios" SET "precioPromedio" = %s WHERE "id" = %s AND "fechaGuardado" = %s
+                        """,
+                        (precio, ean, fecha_utc),
+                    )
+                else:
+                    cur.execute(
+                        """
+                        INSERT INTO "HistorialPrecios" ("id", "fechaGuardado", "precioPromedio")
+                        VALUES (%s, %s, %s)
+                        """,
+                        (ean, fecha_utc, precio),
+                    )
                 guardados += 1
         conn.commit()
         logger.info(f"{guardados} registros guardados en HistorialPrecios")

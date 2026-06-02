@@ -48,15 +48,30 @@ def save_dolar_price(precio: float) -> None:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO "precioDolar" ("fechaGuardado", "precioPromedio")
-                VALUES (%s, %s)
-                ON CONFLICT ("fechaGuardado") DO UPDATE SET
-                    "precioPromedio" = EXCLUDED."precioPromedio"
+                SELECT 1 FROM "precioDolar" WHERE "fechaGuardado" = %s
                 """,
-                (fecha_utc, precio),
+                (fecha_utc,),
             )
+            existe = cur.fetchone()
+
+            if existe:
+                cur.execute(
+                    """
+                    UPDATE "precioDolar" SET "precioPromedio" = %s WHERE "fechaGuardado" = %s
+                    """,
+                    (precio, fecha_utc),
+                )
+                logger.info(f"Precio actualizado: ${precio} para {fecha_utc.date()}")
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO "precioDolar" ("fechaGuardado", "precioPromedio")
+                    VALUES (%s, %s)
+                    """,
+                    (fecha_utc, precio),
+                )
+                logger.info(f"Precio insertado: ${precio} para {fecha_utc.date()}")
         conn.commit()
-        logger.info(f"Precio guardado exitosamente: ${precio} para {fecha_utc.date()}")
     except Exception as e:
         logger.error(f"Error al guardar en la base de datos: {e}")
         conn.rollback()
