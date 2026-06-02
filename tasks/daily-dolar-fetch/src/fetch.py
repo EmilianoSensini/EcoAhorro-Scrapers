@@ -3,7 +3,6 @@ import sys
 import logging
 import requests
 from datetime import datetime, timezone, timedelta
-from urllib.parse import urlparse, parse_qs
 
 AR_TZ = timezone(timedelta(hours=-3))
 
@@ -22,20 +21,6 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
-def parse_database_url(database_url: str) -> dict:
-    parsed = urlparse(database_url)
-    params = parse_qs(parsed.query)
-    ssl_mode = params.get("sslmode", ["prefer"])[0]
-    return {
-        "dbname": parsed.path.lstrip("/"),
-        "user": parsed.username,
-        "password": parsed.password,
-        "host": parsed.hostname,
-        "port": parsed.port or 5432,
-        "sslmode": ssl_mode,
-    }
 
 
 def fetch_dolar_blue() -> float:
@@ -58,8 +43,7 @@ def save_dolar_price(precio: float) -> None:
 
     logger.info(f"Guardando precio para fecha: {fecha_utc.isoformat()}")
 
-    db_params = parse_database_url(DATABASE_URL)
-    conn = psycopg2.connect(**db_params)
+    conn = psycopg2.connect(DATABASE_URL)
     try:
         with conn.cursor() as cur:
             cur.execute(

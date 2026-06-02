@@ -2,7 +2,6 @@ import os
 import sys
 import logging
 from datetime import datetime, timezone, timedelta
-from urllib.parse import urlparse, parse_qs
 
 AR_TZ = timezone(timedelta(hours=-3))
 
@@ -20,20 +19,6 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
-def parse_database_url(database_url: str) -> dict:
-    parsed = urlparse(database_url)
-    params = parse_qs(parsed.query)
-    ssl_mode = params.get("sslmode", ["prefer"])[0]
-    return {
-        "dbname": parsed.path.lstrip("/"),
-        "user": parsed.username,
-        "password": parsed.password,
-        "host": parsed.hostname,
-        "port": parsed.port or 5432,
-        "sslmode": ssl_mode,
-    }
 
 
 def calcular_precios_promedio(cur) -> list:
@@ -58,8 +43,7 @@ def guardar_historial(precios_promedio: list) -> int:
 
     logger.info(f"Guardando historial para fecha: {fecha_utc.isoformat()}")
 
-    db_params = parse_database_url(DATABASE_URL)
-    conn = psycopg2.connect(**db_params)
+    conn = psycopg2.connect(DATABASE_URL)
     guardados = 0
     try:
         with conn.cursor() as cur:
@@ -97,8 +81,7 @@ def main():
     try:
         import psycopg2
 
-        db_params = parse_database_url(DATABASE_URL)
-        conn = psycopg2.connect(**db_params)
+        conn = psycopg2.connect(DATABASE_URL)
         try:
             with conn.cursor() as cur:
                 precios_promedio = calcular_precios_promedio(cur)
