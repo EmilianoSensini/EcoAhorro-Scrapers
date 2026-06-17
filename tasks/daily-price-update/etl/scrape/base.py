@@ -36,11 +36,9 @@ class VtexScraper:
                     return None
                 product = data[0]
                 items = product.get("items", [])
-                raw_price = (
-                    items[0]["sellers"][0]["commertialOffer"]["Price"]
-                    if items and items[0].get("sellers")
-                    else 0
-                )
+                if not items or not items[0].get("sellers"):
+                    return None
+                raw_price = items[0]["sellers"][0]["commertialOffer"]["Price"]
                 id_producto = normalizar_ean(ean)
                 if id_producto is None:
                     return None

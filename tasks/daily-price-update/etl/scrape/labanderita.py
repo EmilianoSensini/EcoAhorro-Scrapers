@@ -82,9 +82,12 @@ class LaBanderitaScraper:
             price_el = item.find("span", class_="price")
             if price_el:
                 for amt in reversed(price_el.find_all("span", class_="amount")):
-                    txt = amt.get_text(strip=True)
-                    if txt:
-                        price = txt
+                    parts = [c for c in amt.contents if isinstance(c, str)]
+                    sup = amt.find("sup")
+                    decimal = sup.get_text(strip=True) if sup else ""
+                    main = "".join(parts).strip()
+                    if main:
+                        price = f"{main},{decimal}" if decimal else main
                         break
             if not price:
                 continue
